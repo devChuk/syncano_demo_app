@@ -1,0 +1,76 @@
+<html>
+<head>
+</head>
+<body >
+
+	<a style="color:#de3230"><div id="age"></div></a>
+
+
+	<form name="inputform" action="somewhere" method="post">
+	    <input value="message" name="message" />
+		<button type="button" id="clickMe">Click Me!</button>
+	</form>
+
+
+
+	<script language="javascript">
+
+	var pointer_data_id = "";
+	var text = "";
+
+
+	var pointer = new XMLHttpRequest();
+	var url = "https://weathered-wood-115384.syncano.com/api/data.get_one";
+	var params = "api_key=73e8719c66b633aea9a28f554b6d93428ef360d1&project_id=5927&collection_id=18457&data_id=3453948";
+	pointer.open("POST", url, true);
+
+	//Send the proper header information along with the request
+	pointer.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+	pointer.onreadystatechange = function() {//Call a function when the state changes.
+	    if(pointer.readyState == 4 && pointer.status == 200) {
+	        pointer_data_id = pointer.responseText;
+	        var arr = pointer_data_id.split("\"");
+	        pointer_data_id = arr[9];
+
+	        var message = new XMLHttpRequest();
+			var url = "https://weathered-wood-115384.syncano.com/api/data.get_one";
+			var params = ("api_key=73e8719c66b633aea9a28f554b6d93428ef360d1&project_id=5927&collection_id=18457&data_id=" + pointer_data_id);
+			message.open("POST", url, true);
+
+			message.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+			message.onreadystatechange = function() {//Call a function when the state changes.
+			    if(message.readyState == 4 && message.status == 200) {
+			        text = message.responseText.split("\"")[9];
+			        document.getElementById("age").innerHTML=text;
+
+			    }
+			}
+			message.send(params);
+	    }
+	}
+	pointer.send(params);
+
+
+
+
+
+
+
+
+	function onClick() {
+		//create new object
+		//set pointer to new object	
+	}
+
+	document.getElementById("clickMe").onclick = onClick;
+
+
+
+	
+
+</script>
+
+</body>
+</html>
