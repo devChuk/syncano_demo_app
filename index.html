@@ -7,7 +7,7 @@
 
 
 	<form name="inputform" action="somewhere" method="post">
-	    <input value="message" name="message" />
+	    <input value="message" id="text" name="message" />
 		<button type="button" id="clickMe">Click Me!</button>
 	</form>
 
@@ -17,6 +17,8 @@
 
 	var pointer_data_id = "";
 	var text = "";
+	var arr;
+	var PPid;
 
 
 	var pointer = new XMLHttpRequest();
@@ -30,8 +32,8 @@
 	pointer.onreadystatechange = function() {//Call a function when the state changes.
 	    if(pointer.readyState == 4 && pointer.status == 200) {
 	        pointer_data_id = pointer.responseText;
-	        var arr = pointer_data_id.split("\"");
-	        pointer_data_id = arr[9];
+	        arr = pointer_data_id.split("\"");
+	        pointer_data_id = arr[5];
 
 	        var message = new XMLHttpRequest();
 			var url = "https://weathered-wood-115384.syncano.com/api/data.get_one";
@@ -44,6 +46,7 @@
 			    if(message.readyState == 4 && message.status == 200) {
 			        text = message.responseText.split("\"")[9];
 			        document.getElementById("age").innerHTML=text;
+			        alert(text);
 
 			    }
 			}
@@ -53,15 +56,45 @@
 	pointer.send(params);
 
 
-
-
-
-
-
-
 	function onClick() {
 		//create new object
 		//set pointer to new object	
+			var newmessage = new XMLHttpRequest();
+			var url = "https://weathered-wood-115384.syncano.com/api/data.new";
+			var params = ("api_key=73e8719c66b633aea9a28f554b6d93428ef360d1&project_id=5927&collection_id=18457&title=data&text=" + document.getElementById("text").value);
+			newmessage.open("POST", url, true);
+
+			newmessage.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+			newmessage.onreadystatechange = function() {//Call a function when the state changes.
+			    if(newmessage.readyState == 4 && newmessage.status == 200) {
+			        PPid = newmessage.responseText.split("\"")[45];
+			        
+			        var update = new XMLHttpRequest();
+					var url = "https://weathered-wood-115384.syncano.com/api/data.update";
+					var params = ("api_key=73e8719c66b633aea9a28f554b6d93428ef360d1&project_id=5927&collection_id=18457&data_id=3453948&text=" + PPid);
+					update.open("POST", url, true);
+
+					update.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+					update.onreadystatechange = function() {//Call a function when the state changes.
+					    if(update.readyState == 4 && update.status == 200) {
+					        //YOU'RE PRETTY MUCH DONE HERE
+					        alert(update.responseText);
+												        
+
+					    }
+					}
+					update.send(params);
+
+
+
+
+
+			        //45
+			    }
+			}
+			newmessage.send(params);
 	}
 
 	document.getElementById("clickMe").onclick = onClick;
