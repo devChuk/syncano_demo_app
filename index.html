@@ -3,7 +3,7 @@
 </head>
 <body >
 
-	<a style="color:#de3230"><div id="age"></div></a>
+	<center><a style="color:#de3230"><div id="age"></div></a>
 
 
 	<form name="inputform" action="somewhere" method="post">
@@ -12,7 +12,7 @@
 	</form>
 
 
-
+	</center>
 	<script language="javascript">
 
 	var pointer_data_id = "";
@@ -80,7 +80,8 @@
 					update.onreadystatechange = function() {//Call a function when the state changes.
 					    if(update.readyState == 4 && update.status == 200) {
 					        //YOU'RE PRETTY MUCH DONE HERE
-					        alert(update.responseText);
+					        document.getElementById("age").innerHTML=document.getElementById("text").value;
+					        alert("Sent!");
 												        
 
 					    }
